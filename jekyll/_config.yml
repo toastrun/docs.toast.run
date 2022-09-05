@@ -41,6 +41,15 @@ callouts:
   note:
     title: Note
     color: blue
+  blue-waring:
+    title: ⚠️
+    color: blue
+  waring:
+    title: ⚠️
+    color: yellow
+  hint:
+    title: 💡
+    color: blue
 
 # Exclude from processing.
 # The following items will not be processed, by default.

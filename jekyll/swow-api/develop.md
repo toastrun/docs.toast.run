@@ -1,6 +1,6 @@
 ---
 layout: page
-title: 'API Reference (develop)'
+title: 'Swow API Reference (develop)'
 has_children: true
 nav_order: 21
 ---
