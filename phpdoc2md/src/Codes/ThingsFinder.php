@@ -43,9 +43,13 @@ class ThingsFinder extends NodeVisitorAbstract
     private array $classSegments = [];
 
     public function __construct(
-        public bool $skipPrivate
+        public bool $skipPrivate,
+        public ?string $ver = null,
     ) {
-        $this->namespacePage = new NamespacePage('\\');
+        $this->namespacePage = new NamespacePage(
+            name: '\\',
+            parentPage: $ver ? "API Reference ($ver)" : 'API Reference',
+        );
         $this->namespacePages[''] = $this->namespacePage;
     }
 

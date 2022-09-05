@@ -4,14 +4,15 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Phpdoc2md\Codes\ThingsFinder;
 
+$ver = $argv[3] ?? null;
 
-$finder = new ThingsFinder(false);
+$finder = new ThingsFinder(false, $ver);
 
 $swowDir = realpath($argv[1]);
 if (!is_dir($swowDir)) {
     throw new Exception('not a dir');
 }
-$destDir = $argv[2];
+$destDir = rtrim($argv[2], '/');
 
 // main stub
 $stubPath = "$swowDir/lib/swow-stub/src/Swow.php";
