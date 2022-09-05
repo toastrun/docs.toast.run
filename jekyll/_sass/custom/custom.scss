@@ -1,0 +1,26 @@
+func-sign, var-sign, const-sign {
+  display: block;
+  font-family: Consolas, Monaco, monospace;
+}
+
+
+.myhl {
+  color: #00193a;
+
+  .modifier, .identifier {
+    font-weight: 600;
+  }
+
+  .type {
+    color: rgb(121, 11, 115)
+  }
+  .identifier {
+    color: #1203e9;
+  }
+  .variable {
+    color: #1002cd;
+  }
+  .and {
+    color: #384cff;
+  }
+}

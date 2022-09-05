@@ -1,0 +1,12 @@
+{% assign varInfo = | page.variables[include.name] %}
+{% unless varInfo %}
+<var-sign style='color: red'>not found variable {{ include.name | escape }}</var-sign>
+{% else %}
+<var-sign class='myhl'>
+    {% assign modifiers = varInfo.modifiers | [] %}
+    {% for modifier in modifiers %}
+    <span class='modifier'>{{ modifier | escape }}</span>
+    {% endfor %}
+    <span class='variable'>${{ include.name | escape }}</span>
+</var-sign>
+{% endunless %}

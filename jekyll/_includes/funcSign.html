@@ -1,0 +1,38 @@
+{% assign funcInfo = | page.functions[include.name] %}
+{% unless funcInfo %}
+<func-sign style='color: red'>not found function {{ include.name | escape }}</func-sign>
+{% else %}
+<func-sign class='myhl'>
+    {% assign modifiers = funcInfo.modifiers | [] %}
+    {% for modifier in modifiers %}
+    <span class='modifier'>{{ modifier | escape }}</span>
+    {% endfor %}
+    <span class='function'>function</span>
+    <span class='identifier'>{{ include.name | escape }}</span>
+    <span class='misc'>(</span>
+    {% assign comma = false %}
+    {% assign params = funcInfo.params | [] %}
+    {% for param in params %}
+        {% if comma %}
+    <span class='misc'>,</span>
+        {% endif %}
+        {% assign comma = true %}
+        {% if param.type %}
+    <span class='type'>{{ param.type | escape }}</span>
+        {% endif %}
+        {% if param.variadic %}
+    <span class='misc'>...</span> 
+        {% endif %}
+        {% if param.byRef %}
+    <span class='and'>&</span> 
+        {% endif %}
+    <span class='variable'>${{ param.name | escape }}</span>
+    {% endfor %}
+    <span class='misc'>)</span>
+    {% if funcInfo.returnType %}
+    <span class='misc'>:</span>
+    <span class='type'>{{ funcInfo.returnType | escape }}</span>
+    {% endif %}
+
+</func-sign>
+{% endunless %}

@@ -1,0 +1,16 @@
+{% assign constInfo = | page.constants[include.name] %}
+{% unless constInfo %}
+<const-sign style='color: red'>not found constant {{ include.name | escape }}</const-sign>
+{% else %}
+<const-sign class='myhl'>
+    {% assign modifiers = constInfo.modifiers | [] %}
+    {% for modifier in modifiers %}
+    <span class='modifier'>{{ modifier | escape }}</span>
+    {% endfor %}
+    <span class='identifier'>{{ include.name | escape }}</span>
+    {% if constInfo.value %}
+    <span class='misc'>=</span>
+    <span class='misc'>{{ constInfo.value | escape }}</span>
+    {% endif %}
+</const-sign>
+{% endunless %}

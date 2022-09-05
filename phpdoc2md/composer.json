@@ -1,0 +1,19 @@
+{
+    "name": "dixyes/phpdoc2md",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Phpdoc2md\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "dixyes",
+            "email": "dixyes@gmail.com"
+        }
+    ],
+    "require": {
+        "phpstan/phpdoc-parser": "^1.8",
+        "nikic/php-parser": "^4.15"
+    }
+}
