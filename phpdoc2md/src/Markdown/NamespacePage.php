@@ -7,7 +7,7 @@ class NamespacePage extends Page
 
     public function __construct(
         private string $name,
-        public string $parentPage = 'API Reference',
+        public string $parentPage,
     ) {
     }
 

@@ -5,8 +5,12 @@ require __DIR__ . '/../vendor/autoload.php';
 use Phpdoc2md\Codes\ThingsFinder;
 
 $ver = $argv[3] ?? null;
+$parentPage = "Swow API Reference";
+if ($ver) {
+    $parentPage = "Swow API Reference ($ver)";
+}
 
-$finder = new ThingsFinder(false, $ver);
+$finder = new ThingsFinder(false, $parentPage);
 
 $swowDir = realpath($argv[1]);
 if (!is_dir($swowDir)) {

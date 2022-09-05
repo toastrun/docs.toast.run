@@ -44,11 +44,11 @@ class ThingsFinder extends NodeVisitorAbstract
 
     public function __construct(
         public bool $skipPrivate,
-        public ?string $ver = null,
+        public string $parentPage,
     ) {
         $this->namespacePage = new NamespacePage(
             name: '\\',
-            parentPage: $ver ? "API Reference ($ver)" : 'API Reference',
+            parentPage: $parentPage,
         );
         $this->namespacePages[''] = $this->namespacePage;
     }
@@ -82,7 +82,10 @@ class ThingsFinder extends NodeVisitorAbstract
             if ($page) {
                 $this->namespacePage = $page;
             } else {
-                $this->namespacePage = new NamespacePage($this->getNamespaceString());
+                $this->namespacePage = new NamespacePage(
+                    name: $this->getNamespaceString(),
+                    parentPage: $this->parentPage,
+                );
                 $this->namespacePages[$this->getNamespaceString()] = $this->namespacePage;
             }
         }
