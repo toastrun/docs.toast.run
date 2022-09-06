@@ -1,0 +1,14 @@
+
+{% for pathPrefix in site.footers %}
+    {% assign prefix = pathPrefix[0] %}
+    {% assign content = pathPrefix[1] %}
+    {% assign checkArray = page.dir | split:prefix %}
+    {% if checkArray[0] == "" %}
+<div class="text-small text-grey-dk-000 mb-0">
+        {% for line in content %}
+    <p>{{ line }}</p>
+        {% endfor %}
+</div>
+        {% break %}
+    {% endif %}
+{% endfor %}
