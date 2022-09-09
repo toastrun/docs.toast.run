@@ -1,0 +1,76 @@
+name: Sync to site
+
+on:
+  push:
+
+jobs:
+  sync:
+    name: Sync to site
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      # yet only this, because multi version is not implemented
+      - name: Checkout Swow Source
+        uses: actions/checkout@v3
+        with:
+          repository: swow/swow
+          ref: ci
+          path: swow-ci
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+          working-directory: jekyll
+
+      - name: Calculate composer hashes
+        shell: bash
+        id: hash
+        working-directory: phpdoc2md
+        run: |
+          composer update --no-install
+          printf "::set-output name=hash::"
+          cat composer.lock | sha256sum | awk '{print $1}'
+
+      - name: Cache composer
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: |
+            phpdoc2md/vendor
+          key: composer-v1-${{ steps.hash.outputs.hash }}
+
+      - name: Prepare composer
+        shell: bash
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: phpdoc2md
+        run: |
+          composer update -o
+
+      - name: Build pages
+        shell: bash
+        run: |
+          php phpdoc2md/bin/phpdoc2md.php swow-ci jekyll/swow-api/ci 'ci'
+          cd jekyll
+          bundle exec jekyll build
+
+      - name: Sync to site
+        shell: bash
+        run: |
+          # prepare ssh
+          umask 077
+          mkdir -p ~/.ssh
+          cat > ~/.ssh/id_ed25519 <<SSHKEY
+          ${{ secrets.SITE_SSH_KEY }}
+          SSHKEY
+          cat > ~/.ssh/known_hosts <<SSHPUBKEY
+          ${{ secrets.SITE_PUB_KEY }}
+          SSHPUBKEY
+
+          cd jekyll/_site
+          rsync -rvz . "${{ secrets.REMOTE_PATH }}"
+
+          rm -r ~/.ssh
