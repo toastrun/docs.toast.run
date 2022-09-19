@@ -2,13 +2,14 @@ name: Sync to site
 
 on:
   push:
-  workflow-dispatch:
+  workflow_dispatch:
     inputs:
       swow_ref:
         description: 'Using Swow commmit'
         default: 'ci'
         required: false
-
+  repository_dispatch:
+    types: [ update ]
 
 jobs:
   sync:
@@ -23,7 +24,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: swow/swow
-          ref: ${{ (github.event.inputs && github.event.inputs.ref) || 'ci' }}
+          ref: ${{ (github.event.inputs && github.event.inputs.swow_ref) || (github.event.client_payload && github.event.client_payload.swow_ref) || 'ci' }}
           path: swow-ci
 
       - name: Setup ruby
