@@ -137,23 +137,42 @@ composer require swow/swow:dev-develop
 
 At `vendor/bin`, there will be a script file `swow-builder`, use it to install Swow.
 
-This script provides 4 arguments: `rebuild`, `show-log`, `debug`, `enable`
-
 ```shell
-# make the extension
+# Compiles extension
 php vendor/bin/swow-builder
 
-# rebuild the extension
-php vendor/bin/swow-builder --rebuild
+# Compiles extension and specify the php-config path
+php vendor/bin/swow-builder --php-config=/path/to/php-config
 
-# make the extension with full logs
+# Show help
+php vendor/bin/swow-builder --help
+
+# Simulate running, used to view the compilation command
+php vendor/bin/swow-builder --dry-run
+
+# Show full compilation log
 php vendor/bin/swow-builder --show-log
 
-# make the extension with debug info
-php vendor/bin/swow-builder --debug
+# Do not ask during the compilation process (such as whether to install)
+php vendor/bin/swow-builder --quiet
 
-# specify args when building
-php vendor/bin/swow-builder --enable="--enable-debug"
+# Rebuild extension
+php vendor/bin/swow-builder --rebuild
+
+# Compile and install extension
+php vendor/bin/swow-builder --install
+
+# Compile and install extension with administrator privileges
+php vendor/bin/swow-builder --install --sudo
+
+# Rebuild and install extension
+php vendor/bin/swow-builder --rebuild --install
+
+# Rebuild and install extension and enable some features
+php vendor/bin/swow-builder --rebuild --install --ssl --curl
+
+# Compile and install extension and open the extension debug mode
+php vendor/bin/swow-builder --install --debug
 ```
 
 Use `-d` to load Swow Extension is recommanded: `php -d extension=swow`
@@ -161,42 +180,26 @@ Use `-d` to load Swow Extension is recommanded: `php -d extension=swow`
 
 ## Configure Arguments
 
-### Switches
+> 1. PHP type compile arguments should be specified when compiling PHP
+>
+> 2. DEBUG type compile arguments need to enable `--debug` first to take effect
+>
+> 3. `--enable` or `--with` arguments mostly support path parameters after equal sign
+>
+> 4. Builder Alias is the alias of the argument when using `swow-builder`
 
-* `--enable-swow`
-
-Enable Swow (default is on)
-
-* `--enable-swow-ssl`
-
-Enable Swow ssl support (requires openssl)
-
-* `--enable-swow-curl`
-
-Enable Swow cURL support (requires cURL)
-
-### Debug Arguments
-
-* `--enable-debug`
-
-Enable PHP debug mode, this arg is used when **configuring PHP**, It's useless when configuring Swow.
-
-* (Windows) `--enable-debug-pack`
-
-Enable debug pack, used for debugging windows "release" builds, used in **configuring Swow**, conflict with `--enable-debug`
-
-* `--enable-swow-debug`
-
-Enable Swow debug mode
-
-* (Linux) `--enable-swow-valgrind`
-
-(Needs `--enable-swow-debug`) Enable Swow valgrind support, for checking C code memory usage.
-
-* (Unix-like) `--enable-swow-gcov`
-
-(Needs `--enable-swow-debug`) Enable Swow GCOV support, for checking C coverage
-
-* (Unix-like)`--enable-swow-{address,undefined,memory}-sanitizer`
-
-(Needs `--enable-swow-debug`) Enable Swow {A,UB,M}San support, for C sanitizing
+| Option                            | Alias in Builder    | Type  | Platform  | Description                                                  |
+| --------------------------------- | ------------------- | ----- | --------- | ------------------------------------------------------------ |
+| --with-php-config=<path>          | --php-config=<path> |       |           | 指定php-config路径                                           |
+| --enable-debug                    |                     | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
+| --enable-swow                     |                     |       |           | 启用Swow扩展的编译（默认启用）                               |
+| --enable-debug-pack               |                     |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
+| --enable-swow-debug               | --debug             |       |           | 启用DEBUG编译                                                |
+| --eanble-swow-memory-sanitizer    | --msan              | Debug | Unix-like | 启用memory-sanitizer帮助底层进行内存分析                     |
+| --enable-swow-address-sanitizer   | --asan              | Debug | Unix-like | 启用address-sanitizer帮助底层进行内存分析                    |
+| --enable-swow-undefined-sanitizer | --ubsan             | Debug | Unix-like | 启用undefined-sanitizer帮助底层进行未定义行为分析            |
+| --enable-swow-gcov                | --gcov              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
+| --enable-swow-valgrind            | --valgrind          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
+| --enable-swow-thread-context      | --thread-context    |       |           | 使用线程而不是boost-context作为协程上下文管理                |
+| --enable-swow-ssl                 | --ssl               |       |           | 启用SSL支持，需要OpenSSL（默认检测到有则自动启用）           |
+| --enable-swow-curl                | --curl              |       |           | 启用cURL支持，需要libcurl（默认检测到有则自动启用）          |

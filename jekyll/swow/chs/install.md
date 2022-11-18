@@ -137,23 +137,42 @@ composer require swow/swow:dev-develop
 
 下载完成后在 `vendor/bin` 目录中会有一个 `swow-builder` 的文件，我们可以使用此脚本文件来安装扩展
 
-此脚本提供了4个参数，分别为`rebuild`, `show-log`, `debug`, `enable`，支持同时多个参数，示例如下
-
 ```shell
 # 编译扩展
 php vendor/bin/swow-builder
 
-# 重新编译扩展
-php vendor/bin/swow-builder --rebuild
+# 编译扩展并指定php-config路径
+php vendor/bin/swow-builder --php-config=/path/to/php-config
+
+# 查看帮助
+php vendor/bin/swow-builder --help
+
+# 模拟运行，用于查看编译命令
+php vendor/bin/swow-builder --dry-run
 
 # 编译扩展时显示完整编译日志信息
 php vendor/bin/swow-builder --show-log
 
-# 编译扩展并打开扩展的调试模式
-php vendor/bin/swow-builder --debug
+# 编译扩展过程中不进行询问 (如询问是否安装)
+php vendor/bin/swow-builder --quiet
 
-# 编译扩展时增加一些编译参数
-php vendor/bin/swow-builder --enable="--enable-debug"
+# 重新编译扩展
+php vendor/bin/swow-builder --rebuild
+
+# 编译并安装扩展
+php vendor/bin/swow-builder --install
+
+# 编译并使用管理员权限安装扩展
+php vendor/bin/swow-builder --install --sudo
+
+# 重新编译并安装扩展
+php vendor/bin/swow-builder --rebuild --install
+
+# 重新编译安装扩展并启用一些功能
+php vendor/bin/swow-builder --rebuild --install --ssl --curl
+
+# 编译安装扩展并打开扩展的调试模式
+php vendor/bin/swow-builder --install --debug
 ```
 
 编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
@@ -161,42 +180,25 @@ php vendor/bin/swow-builder --enable="--enable-debug"
 
 ## 编译参数
 
-### 支持参数
+> 1. PHP类型的编译参数需要在编译PHP时指定
+>
+> 2. DEBUG类型的编译参数需要先启用`--debug`才能生效
+>
+> 3. `--enable`或`--with`参数大都支持在后面用等于号指定路径参数
+> 4. Builder Alias 是指在使用`swow-builder`时传参的别名
 
-* `--enable-swow`
-
-开启Swow扩展的编译（默认开启）
-
-* `--enable-swow-ssl`
-
-开启Swow SSL支持，需要OpenSSL
-
-* `--enable-swow-curl`
-
-开启Swow cURL支持，需要cURL
-
-### 调试参数
-
-* `--enable-debug`
-
-打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效
-
-* （Windows）`--enable-debug-pack`
-
-打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用
-
-* `--enable-swow-debug`
-
-打开Swow的调试模式
-
-* （Linux）`--enable-swow-valgrind`
-
-（需要`--enable-swow-debug`）打开Swow的valgrind支持，用于检查C代码内存问题
-
-* （Unix-like）`--enable-swow-gcov`
-
-（需要`--enable-swow-debug`）开启Swow的GCOV支持，用于C代码覆盖率支持
-
-* （Unix-like）`--enable-swow-{address,undefined,memory}-sanitizer`
-
-（需要`--enable-swow-debug`）开启Swow的{A,UB,M}San支持，用于找出C代码的潜在问题
+| 选项                              | 在Builder中的别名   | 类型  | 支持平台  | 描述                                                         |
+| --------------------------------- | ------------------- | ----- | --------- | ------------------------------------------------------------ |
+| --with-php-config=<path>          | --php-config=<path> |       |           | 指定php-config路径                                           |
+| --enable-debug                    |                     | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
+| --enable-swow                     |                     |       |           | 启用Swow扩展的编译（默认启用）                               |
+| --enable-debug-pack               |                     |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
+| --enable-swow-debug               | --debug             |       |           | 启用DEBUG编译                                                |
+| --eanble-swow-memory-sanitizer    | --msan              | Debug | Unix-like | 启用memory-sanitizer帮助底层进行内存分析                     |
+| --enable-swow-address-sanitizer   | --asan              | Debug | Unix-like | 启用address-sanitizer帮助底层进行内存分析                    |
+| --enable-swow-undefined-sanitizer | --ubsan             | Debug | Unix-like | 启用undefined-sanitizer帮助底层进行未定义行为分析            |
+| --enable-swow-gcov                | --gcov              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
+| --enable-swow-valgrind            | --valgrind          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
+| --enable-swow-thread-context      | --thread-context    |       |           | 使用线程而不是boost-context作为协程上下文管理                |
+| --enable-swow-ssl                 | --ssl               |       |           | 启用SSL支持，需要OpenSSL（默认检测到有则自动启用）           |
+| --enable-swow-curl                | --curl              |       |           | 启用cURL支持，需要libcurl（默认检测到有则自动启用）          |
