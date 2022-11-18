@@ -187,18 +187,18 @@ php vendor/bin/swow-builder --install --debug
 > 3. `--enable`或`--with`参数大都支持在后面用等于号指定路径参数
 > 4. Builder Alias 是指在使用`swow-builder`时传参的别名
 
-| 选项                              | 在Builder中的别名   | 类型  | 支持平台  | 描述                                                         |
-| --------------------------------- | ------------------- | ----- | --------- | ------------------------------------------------------------ |
-| --with-php-config=<path>          | --php-config=<path> |       |           | 指定php-config路径                                           |
-| --enable-debug                    |                     | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
-| --enable-swow                     |                     |       |           | 启用Swow扩展的编译（默认启用）                               |
-| --enable-debug-pack               |                     |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
-| --enable-swow-debug               | --debug             |       |           | 启用DEBUG编译                                                |
-| --eanble-swow-memory-sanitizer    | --msan              | Debug | Unix-like | 启用memory-sanitizer帮助底层进行内存分析                     |
-| --enable-swow-address-sanitizer   | --asan              | Debug | Unix-like | 启用address-sanitizer帮助底层进行内存分析                    |
-| --enable-swow-undefined-sanitizer | --ubsan             | Debug | Unix-like | 启用undefined-sanitizer帮助底层进行未定义行为分析            |
-| --enable-swow-gcov                | --gcov              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
-| --enable-swow-valgrind            | --valgrind          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
-| --enable-swow-thread-context      | --thread-context    |       |           | 使用线程而不是boost-context作为协程上下文管理                |
-| --enable-swow-ssl                 | --ssl               |       |           | 启用SSL支持，需要OpenSSL（默认检测到有则自动启用）           |
-| --enable-swow-curl                | --curl              |       |           | 启用cURL支持，需要libcurl（默认检测到有则自动启用）          |
+| 选项                                | 在Builder中的别名     | 类型  | 支持平台  | 描述                                                         |
+| ----------------------------------- | --------------------- | ----- | --------- | ------------------------------------------------------------ |
+| `--with-php-config=<path>`          | `--php-config=<path>` |       |           | 指定`php-config`路径                                         |
+| `--enable-debug`                    |                       | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
+| `--enable-swow`                     |                       |       |           | 启用Swow扩展的编译（默认启用）                               |
+| `--enable-debug-pack`               |                       |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
+| `--enable-swow-debug`               | `--debug`             |       |           | 启用DEBUG编译                                                |
+| `--eanble-swow-memory-sanitizer`    | `--msan`              | Debug | Unix-like | 启用`memory-sanitizer`帮助底层进行内存分析                   |
+| `--enable-swow-address-sanitizer`   | `--asan`              | Debug | Unix-like | 启用`address-sanitizer`帮助底层进行内存分析                  |
+| `--enable-swow-undefined-sanitizer` | `--ubsan`             | Debug | Unix-like | 启用`undefined-sanitizer`帮助底层进行未定义行为分析          |
+| `--enable-swow-gcov`                | `--gcov`              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
+| `--enable-swow-valgrind`            | `--valgrind`          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
+| `--enable-swow-thread-context`      | `--thread-context`    |       |           | 使用线程而不是`boost-context`作为协程上下文管理              |
+| `--enable-swow-ssl`                 | `--ssl`               |       |           | 启用SSL支持，需要`OpenSSL`（默认检测到有则自动启用）         |
+| `--enable-swow-curl`                | `--curl`              |       |           | 启用cURL支持，需要`libcurl`（默认检测到有则自动启用）        |
