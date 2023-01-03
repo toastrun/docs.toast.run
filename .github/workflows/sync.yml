@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       swow_ref:
-        description: 'Using Swow commmit'
+        description: 'Using Swow commit'
         default: 'ci'
         required: false
   repository_dispatch:
