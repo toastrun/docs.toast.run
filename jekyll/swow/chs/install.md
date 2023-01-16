@@ -38,7 +38,10 @@ php vendor/bin/swow-builder --show-log
 # 编译扩展过程中不进行询问 (如询问是否安装)
 php vendor/bin/swow-builder --quiet
 
-# 重新编译扩展
+# 清理后编译扩展
+php vendor/bin/swow-builder --clean
+
+# 重新检测配置并清理后再编译扩展
 php vendor/bin/swow-builder --rebuild
 
 # 编译并安装扩展
@@ -47,17 +50,32 @@ php vendor/bin/swow-builder --install
 # 编译并使用管理员权限安装扩展
 php vendor/bin/swow-builder --install --sudo
 
-# 重新编译并安装扩展
+# 清理后再编译并安装扩展
+php vendor/bin/swow-builder --clean --install
+
+# 重新检测配置并清理后再编译并安装扩展
 php vendor/bin/swow-builder --rebuild --install
 
-# 重新编译安装扩展并启用一些功能
+# 重新编译并安装扩展且手动指定启用一些功能
 php vendor/bin/swow-builder --rebuild --install --ssl --curl
 
 # 编译安装扩展并打开扩展的调试模式
 php vendor/bin/swow-builder --install --debug
 ```
 
-编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
+使用 `swow-builder` 安装时，程序在最后会询问并尝试使用管理员权限安装 Swow 扩展到系统路径，此时 `sudo` 可能会询问你管理员密码来安装 Swow 到系统目录。
+
+安装程序在安装过程中会输出类似于下述的指令：
+
+```shell
+/usr/bin/env php -d extension=/path/to/your-project/vendor/swow/swow/ext/modules/swow.so --ri swow
+```
+
+你可以复制该指令并在命令行中运行，以检查 Swow 是否安装成功。
+
+你也可以参考它来运行你的程序，而不是将 so 添加到全局的 ini 配置文件中，这样做的好处是你可以在不同的项目中使用不同的 Swow 版本。
+
+编译安装成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
 {: .hint }
 
 ---

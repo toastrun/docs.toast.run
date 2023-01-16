@@ -38,7 +38,10 @@ php vendor/bin/swow-builder --show-log
 # Do not ask during the compilation process (such as whether to install)
 php vendor/bin/swow-builder --quiet
 
-# Rebuild extension
+# Clean and compile extension
+php vendor/bin/swow-builder --clean
+
+# Re-configure and clean and compile extension
 php vendor/bin/swow-builder --rebuild
 
 # Compile and install extension
@@ -47,15 +50,32 @@ php vendor/bin/swow-builder --install
 # Compile and install extension with administrator privileges
 php vendor/bin/swow-builder --install --sudo
 
-# Rebuild and install extension
+# Clean and compile and install extension
+php vendor/bin/swow-builder --clean --install
+
+# Re-configure and clean and compile and install extension
 php vendor/bin/swow-builder --rebuild --install
 
-# Rebuild and install extension and enable some features
+# Re-configure and compile and install extension and manually specify that some features are enabled
 php vendor/bin/swow-builder --rebuild --install --ssl --curl
 
 # Compile and install extension and open the extension debug mode
 php vendor/bin/swow-builder --install --debug
 ```
+
+When using `swow-builder` to install, the program will ask and try to use administrator privileges to install Swow extension to the system path at the end,
+at this time `sudo` may ask you for the administrator password to install Swow to the system directory.
+
+Install program will output similar instructions during installation:
+
+```shell
+/usr/bin/env php -d extension=/path/to/your-project/vendor/swow/swow/ext/modules/swow.so --ri swow
+```
+
+You can copy the instruction and run it in the command line to check if Swow is installed successfully.
+
+You can also refer to it to run your program, instead of adding the so to the global ini configuration file,
+the benefit of this is that you can use different Swow versions in different projects.
 
 Use `-d` to load Swow Extension is recommended: `php -d extension=swow`
 {: .hint }
