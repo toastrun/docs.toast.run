@@ -9,7 +9,85 @@ nav_order: 10
 
 Swow 扩展安装提供了以下几种方法
 
-## 编译安装 (UNIX-like 或 cygwin、msys、wsl)
+## 通过 Composer 安装
+
+可以使用 Composer 下载源码
+
+```shell
+composer require swow/swow
+```
+
+下载完成后在 `vendor/bin` 目录中会有一个 `swow-builder` 的文件，我们可以使用此脚本文件来安装扩展
+
+```shell
+# 编译扩展
+php vendor/bin/swow-builder
+
+# 编译扩展并指定php-config路径
+php vendor/bin/swow-builder --php-config=/path/to/php-config
+
+# 查看帮助
+php vendor/bin/swow-builder --help
+
+# 模拟运行，用于查看编译命令
+php vendor/bin/swow-builder --dry-run
+
+# 编译扩展时显示完整编译日志信息
+php vendor/bin/swow-builder --show-log
+
+# 编译扩展过程中不进行询问 (如询问是否安装)
+php vendor/bin/swow-builder --quiet
+
+# 重新编译扩展
+php vendor/bin/swow-builder --rebuild
+
+# 编译并安装扩展
+php vendor/bin/swow-builder --install
+
+# 编译并使用管理员权限安装扩展
+php vendor/bin/swow-builder --install --sudo
+
+# 重新编译并安装扩展
+php vendor/bin/swow-builder --rebuild --install
+
+# 重新编译安装扩展并启用一些功能
+php vendor/bin/swow-builder --rebuild --install --ssl --curl
+
+# 编译安装扩展并打开扩展的调试模式
+php vendor/bin/swow-builder --install --debug
+```
+
+编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
+{: .hint }
+
+---
+
+## 编译参数
+
+> 1. PHP类型的编译参数需要在编译PHP时指定
+>
+> 2. DEBUG类型的编译参数需要先启用`--debug`才能生效
+>
+> 3. `--enable`或`--with`参数大都支持在后面用等于号指定路径参数
+> 4. Builder Alias 是指在使用`swow-builder`时传参的别名
+
+| 选项                                | 在Builder中的别名     | 类型  | 支持平台  | 描述                                                         |
+| ----------------------------------- | --------------------- | ----- | --------- | ------------------------------------------------------------ |
+| `--with-php-config=<path>`          | `--php-config=<path>` |       |           | 指定`php-config`路径                                         |
+| `--enable-debug`                    |                       | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
+| `--enable-swow`                     |                       |       |           | 启用Swow扩展的编译（默认启用）                               |
+| `--enable-debug-pack`               |                       |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
+| `--enable-swow-debug`               | `--debug`             |       |           | 启用DEBUG编译                                                |
+| `--eanble-swow-memory-sanitizer`    | `--msan`              | Debug | Unix-like | 启用`memory-sanitizer`帮助底层进行内存分析                   |
+| `--enable-swow-address-sanitizer`   | `--asan`              | Debug | Unix-like | 启用`address-sanitizer`帮助底层进行内存分析                  |
+| `--enable-swow-undefined-sanitizer` | `--ubsan`             | Debug | Unix-like | 启用`undefined-sanitizer`帮助底层进行未定义行为分析          |
+| `--enable-swow-gcov`                | `--gcov`              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
+| `--enable-swow-valgrind`            | `--valgrind`          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
+| `--enable-swow-thread-context`      | `--thread-context`    |       |           | 使用线程而不是`boost-context`作为协程上下文管理              |
+| `--enable-swow-ssl`                 | `--ssl`               |       |           | 启用SSL支持，需要`OpenSSL`（默认检测到有则自动启用）         |
+| `--enable-swow-curl`                | `--curl`              |       |           | 启用cURL支持，需要`libcurl`（默认检测到有则自动启用）        |
+
+## 手动编译安装 (UNIX-like 或 cygwin、msys、wsl)
 
 首先安装PHP和它的开发包（php头文件和phpize，php-config等），安装方法参考各发行版说明
 
@@ -66,7 +144,9 @@ sudo make install
 编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
 {: .hint }
 
-## 编译安装 (Windows)
+---
+
+## 手动编译安装 (Windows)
 
 ### 准备MSVC
 
@@ -126,79 +206,3 @@ nmake
 
 编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
 {: .note }
-
-## Composer
-
-可以使用 Composer 下载源码
-
-```shell
-composer require swow/swow
-```
-
-下载完成后在 `vendor/bin` 目录中会有一个 `swow-builder` 的文件，我们可以使用此脚本文件来安装扩展
-
-```shell
-# 编译扩展
-php vendor/bin/swow-builder
-
-# 编译扩展并指定php-config路径
-php vendor/bin/swow-builder --php-config=/path/to/php-config
-
-# 查看帮助
-php vendor/bin/swow-builder --help
-
-# 模拟运行，用于查看编译命令
-php vendor/bin/swow-builder --dry-run
-
-# 编译扩展时显示完整编译日志信息
-php vendor/bin/swow-builder --show-log
-
-# 编译扩展过程中不进行询问 (如询问是否安装)
-php vendor/bin/swow-builder --quiet
-
-# 重新编译扩展
-php vendor/bin/swow-builder --rebuild
-
-# 编译并安装扩展
-php vendor/bin/swow-builder --install
-
-# 编译并使用管理员权限安装扩展
-php vendor/bin/swow-builder --install --sudo
-
-# 重新编译并安装扩展
-php vendor/bin/swow-builder --rebuild --install
-
-# 重新编译安装扩展并启用一些功能
-php vendor/bin/swow-builder --rebuild --install --ssl --curl
-
-# 编译安装扩展并打开扩展的调试模式
-php vendor/bin/swow-builder --install --debug
-```
-
-编译成功后，在使用时推荐通过 `-d` 来按需加载 Swow 扩展，如：`php -d extension=swow`
-{: .hint }
-
-## 编译参数
-
-> 1. PHP类型的编译参数需要在编译PHP时指定
->
-> 2. DEBUG类型的编译参数需要先启用`--debug`才能生效
->
-> 3. `--enable`或`--with`参数大都支持在后面用等于号指定路径参数
-> 4. Builder Alias 是指在使用`swow-builder`时传参的别名
-
-| 选项                                | 在Builder中的别名     | 类型  | 支持平台  | 描述                                                         |
-| ----------------------------------- | --------------------- | ----- | --------- | ------------------------------------------------------------ |
-| `--with-php-config=<path>`          | `--php-config=<path>` |       |           | 指定`php-config`路径                                         |
-| `--enable-debug`                    |                       | PHP   |           | 打开PHP的调试模式，需要在**编译PHP时**指定，在编译Swow时指定无效 |
-| `--enable-swow`                     |                       |       |           | 启用Swow扩展的编译（默认启用）                               |
-| `--enable-debug-pack`               |                       |       | Windows   | 打开扩展的的debug pack构建，用于Windows下Release版本PHP的Swow调试，**编译Swow时**指定，不能与`--enable-debug`一同使用 |
-| `--enable-swow-debug`               | `--debug`             |       |           | 启用DEBUG编译                                                |
-| `--eanble-swow-memory-sanitizer`    | `--msan`              | Debug | Unix-like | 启用`memory-sanitizer`帮助底层进行内存分析                   |
-| `--enable-swow-address-sanitizer`   | `--asan`              | Debug | Unix-like | 启用`address-sanitizer`帮助底层进行内存分析                  |
-| `--enable-swow-undefined-sanitizer` | `--ubsan`             | Debug | Unix-like | 启用`undefined-sanitizer`帮助底层进行未定义行为分析          |
-| `--enable-swow-gcov`                | `--gcov`              | Debug | Unix-like | 启用GCOV支持，用于支持统计C代码覆盖率                        |
-| `--enable-swow-valgrind`            | `--valgrind`          | Debug | Linux     | 启用Valgrind支持（默认检测到有则自动启用）                   |
-| `--enable-swow-thread-context`      | `--thread-context`    |       |           | 使用线程而不是`boost-context`作为协程上下文管理              |
-| `--enable-swow-ssl`                 | `--ssl`               |       |           | 启用SSL支持，需要`OpenSSL`（默认检测到有则自动启用）         |
-| `--enable-swow-curl`                | `--curl`              |       |           | 启用cURL支持，需要`libcurl`（默认检测到有则自动启用）        |
