@@ -79,6 +79,7 @@ jobs:
           SSHPUBKEY
 
           cd jekyll/_site
+          echo '9f06b4f335bf2e3b6adf7d01abd31e07' > ./baidu_verify_codeva-gcshIa1uCm.html
           rsync -rvz . "${{ secrets.REMOTE_PATH }}"
 
           rm -r ~/.ssh
