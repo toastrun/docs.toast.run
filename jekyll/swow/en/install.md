@@ -132,7 +132,7 @@ Use `-d` to load Swow Extension is recommanded: `php -d extension=swow`
 You can fetch swow source with composer:
 
 ```shell
-composer require swow/swow:dev-develop
+composer require swow/swow
 ```
 
 At `vendor/bin`, there will be a script file `swow-builder`, use it to install Swow.

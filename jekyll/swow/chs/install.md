@@ -132,7 +132,7 @@ nmake
 可以使用 Composer 下载源码
 
 ```shell
-composer require swow/swow:dev-develop
+composer require swow/swow
 ```
 
 下载完成后在 `vendor/bin` 目录中会有一个 `swow-builder` 的文件，我们可以使用此脚本文件来安装扩展

@@ -2,7 +2,7 @@
 layout: page
 title: Swow Blog CHS
 has_children: true
-nav_order: 30
+nav_order: 21
 ---
 
 # Swow Blog
