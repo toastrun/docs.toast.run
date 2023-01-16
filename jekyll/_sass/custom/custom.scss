@@ -1,5 +1,5 @@
 body {
-  font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Microsoft YaHei", "WenQuanYi Micro Hei", "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
 
 func-sign, var-sign, const-sign {
@@ -27,4 +27,14 @@ func-sign, var-sign, const-sign {
   .and {
     color: #384cff;
   }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+#toctitle {
+  color: #183385;
 }
