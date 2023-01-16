@@ -108,6 +108,8 @@ Use `-d` to load Swow Extension is recommended: `php -d extension=swow`
 | `--enable-swow-ssl`                 | `--ssl`               |       |           | 启用SSL支持，需要`OpenSSL`（默认检测到有则自动启用）         |
 | `--enable-swow-curl`                | `--curl`              |       |           | 启用cURL支持，需要`libcurl`（默认检测到有则自动启用）        |
 
+---
+
 ## Manually Build and Install (UNIX-like or cygwin, msys, wsl)
 
 First prepare PHP developement prerequisites (You need PHP headers, `phpize`, `php-config` etc)

@@ -105,6 +105,8 @@ php vendor/bin/swow-builder --install --debug
 | `--enable-swow-ssl`                 | `--ssl`               |       |           | 启用SSL支持，需要`OpenSSL`（默认检测到有则自动启用）         |
 | `--enable-swow-curl`                | `--curl`              |       |           | 启用cURL支持，需要`libcurl`（默认检测到有则自动启用）        |
 
+---
+
 ## 手动编译安装 (UNIX-like 或 cygwin、msys、wsl)
 
 首先安装PHP和它的开发包（php头文件和phpize，php-config等），安装方法参考各发行版说明
