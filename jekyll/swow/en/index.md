@@ -7,7 +7,7 @@ nav_order: 11
 
 # Swow
 
-**Swow is a high-performance pure coroutine network communication engine, which based on PHP and C.**
+**Swow is a multi-platform support coroutine-based engine with a focus on concurrent I/O.**
 
 It is committed to using the smallest C core and most of the PHP code to support PHP high-performance network programming.
 
