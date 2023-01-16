@@ -1,7 +1,7 @@
 ---
 layout: home
 title: Home Page
-nav_order: 10
+nav_order: 1
 ---
 
 # Guide
