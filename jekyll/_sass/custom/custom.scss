@@ -38,3 +38,8 @@ h6,
 #toctitle {
   color: #183385;
 }
+
+h4,
+.text-delta {
+  @include fs-4;
+}
