@@ -588,3 +588,6 @@ Hello Swow
 
 总之，你现在需要知道的是，在 Swow 中，协程无处不在，你可以尽情地开始书写属于你的第一个 Swow 脚本。
 
+## 附录
+
+![image-20230103124709742](https://s2.loli.net/2023/01/03/1KsyJYxmLGH7tgi.png)
