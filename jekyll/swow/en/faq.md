@@ -20,7 +20,7 @@ Swow and Swoole provides similar kind of facilities, so they are exclusive, plea
 
 ```
 > attach 3
-Error: Please re-run your program with "-e" option in path/to/vendor/swow/swow/lib/src/Swow/Debug/Debugger.php:0
+Error: Please re-run your program with "-e" option in path/to/vendor/swow/swow/lib/swow-library/src/Debug/Debugger/Debugger.php:0
 ```
 
 Append `-e` argument in php command line like: `php -e your_file.php`。
