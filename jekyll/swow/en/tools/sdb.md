@@ -19,7 +19,7 @@ SDB is a debugger written in PHP
 Add the following line in your code:
 
 ```php
-\Swow\Debug\Debugger::runOnTTY();
+\Swow\Debug\Debugger\Debugger::runOnTTY();
 ```
 
 Run your code with `-e`:
@@ -71,7 +71,7 @@ If any coroutine is still running when exiting, you can use key combinations to 
 The default key combination is `sdb` + enter, you can set this in `runOnTTY()`:
 
 ```php
-\Swow\Debug\Debugger::runOnTTY('swow');
+\Swow\Debug\Debugger\Debugger::runOnTTY('swow');
 ```
 
 Otherwise, the program will exit immediately.

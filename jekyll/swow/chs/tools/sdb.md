@@ -19,7 +19,7 @@ SDB 是一款使用 PHP 编写的协程调试器工具。
 只需要在你的代码当中加入一行代码：
 
 ```php
-\Swow\Debug\Debugger::runOnTTY();
+\Swow\Debug\Debugger\Debugger::runOnTTY();
 ```
 
 在终端中启动运行时加上`-e`：
@@ -71,7 +71,7 @@ Enter 'r' to run your program
 关键词默认为`sdb`，可以在调用`runOnTTY()`方法时设置，如：
 
 ```php
-\Swow\Debug\Debugger::runOnTTY('swow');
+\Swow\Debug\Debugger\Debugger::runOnTTY('swow');
 ```
 
 反之则直接退出。

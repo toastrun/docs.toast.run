@@ -21,7 +21,7 @@ Coroutine module is incompatible with some extensions that setup exit user opcod
 ```
 # 进入id为3的协程进行跟踪调试
 > attach 3
-Error: Please re-run your program with "-e" option in path/to/vendor/swow/swow/lib/src/Swow/Debug/Debugger.php:0
+Error: Please re-run your program with "-e" option in path/to/vendor/swow/swow/lib/swow-library/src/Debug/Debugger/Debugger.php:0
 ```
 
 需要在运行的时候加上`-e`参数，如`php -e your_file.php`。
