@@ -169,16 +169,16 @@ Swow 提供了丰富多样的调试机制与强大且低门槛的调试能力，
 
 ## 同步阻塞协程化
 
-| 同步阻塞协程化 | Swow | Swoole                  | 其它异步协程生态               |
-| --------------- | -------- | ----------------------------------- | --------------- |
-| PHP stream (阻塞模式) | ✅        | ✅                                  | ❌                             |
+| 同步阻塞协程化 | Swow | Swoole               | 其它异步协程生态               |
+| --------------- | -------- | -------------------------------- | --------------- |
+| PHP stream (阻塞模式) | ✅        | ✅                               | ❌                             |
 | PHP stream (非阻塞模式) | ✅ BIO模式 | ✅ SSL_read/write模式 | ❌ |
 | PHP stream (文件IO) | ✅ | ✅ | ❌ |
 | PHP stream (文件锁) | ✅ 全场景覆盖 | ✅ | ❌ |
 | pdo_mysql | ✅ | ✅ | ❌ |
-| pdo_pgsql | ⚠️ 暂不支持[^not-supported-yet] | ⚠️ 暂不支持[^not-supported-yet] | ❌ |
+| pdo_pgsql | ✅ | ✅ | ❌ |
 | mysqli | ✅ | ✅ | ❌ |
-| phpredis  | ✅       | ✅                  | ❌             |
+| phpredis  | ✅       | ✅               | ❌             |
 | curl | ✅ | ✅ | ❌ |
 | proc_open | ✅ | ✅ | ❌ |
 | sockets扩展 | ⚠️ 暂不支持[^not-supported-yet] | ✅ | ❌ |
