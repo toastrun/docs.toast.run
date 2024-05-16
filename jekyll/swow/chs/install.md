@@ -23,7 +23,11 @@ composer require swow/swow
 # 编译扩展
 php vendor/bin/swow-builder
 
-# 编译扩展并指定php-config路径
+# 编译扩展并指定php-config路径，注意这里需要配置的是php-config的路径，而非php命令的
+# 自行手动安装的和大多数发行版的包提供的php对应的php-config都在相同目录下
+# 例如almalinux的php，php-devel包中php在/usr/bin/php，php-config在/usr/bin/php-config
+# alpine的php81，php81-dev包中php在/usr/bin/php81，php-config在/usr/bin/php-config81
+# 如果你的PHP发行没有提供这一文件，你可能需要自行构建php
 php vendor/bin/swow-builder --php-config=/path/to/php-config
 
 # 查看帮助
