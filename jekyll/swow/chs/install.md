@@ -185,7 +185,7 @@ sudo make install
 
 ### 准备devpack
 
-在 [PHP Windows 下载页](https://windows.php.net/download/) 找到你所使用PHP版本的"Development package (SDK to develop PHP extensions)"链接，下载它
+在 [PHP Windows 下载页](https://downloads.php.net/~windows/) 找到你所使用PHP版本的"Development package (SDK to develop PHP extensions)"链接，下载它
 
 解压到任意目录（以下使用C:\php-8.0.1-devel-vs16-x64为例）
 
@@ -199,9 +199,9 @@ git clone https://github.com/php/php-sdk-binary-tools
 
 ### 准备构建依赖（Windows）
 
-在 `https://windows.php.net/downloads/php-sdk/deps/<vc版本例如vc15或者vs16>/<架构名例如x64>/` 找到依赖的包（例如curl）
+在 `https://downloads.php.net/~windows/php-sdk/deps/<vc版本例如vc15或者vs16>/<架构名例如x64>/` 找到依赖的包（例如curl）
 
-注意版本对齐，未对齐的依赖版本可能导致奇怪的segfault，PHP无法正常退出等神奇问题，`https://windows.php.net/downloads/php-sdk/deps/series/`中的文件提供了这些版本信息
+注意版本对齐，未对齐的依赖版本可能导致奇怪的segfault，PHP无法正常退出等神奇问题，`https://downloads.php.net/~windows/php-sdk/deps/series/`中的文件提供了这些版本信息
 
 解压到任意目录（以下使用C:\deps为例）
 

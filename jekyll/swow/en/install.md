@@ -184,7 +184,7 @@ Choose your MSVC version. For example, If your php is downloaded from windows.ph
 
 ### Prepare devpack
 
-Download devpack from [PHP Windows download page](https://windows.php.net/download/): Find your version's "Development package (SDK to develop PHP extensions)"
+Download devpack from [PHP Windows download page](https://downloads.php.net/~windows/): Find your version's "Development package (SDK to develop PHP extensions)"
 
 Extract it to any path (e.g. C:\php-8.0.1-devel-vs16-x64)
 
@@ -198,9 +198,9 @@ git clone https://github.com/php/php-sdk-binary-tools
 
 ### Prepare (Windows)
 
-Find dependencies from `https://windows.php.net/downloads/php-sdk/deps/<vc version like "vc15" or "vs16">/<arch like "x64">/`
+Find dependencies from `https://downloads.php.net/~windows/php-sdk/deps/<vc version like "vc15" or "vs16">/<arch like "x64">/`
 
-Make sure the version is matched with your extension. Unmatched dep version may cause strange problems like segfault, stuck, and corrupt behavior. Files in `https://windows.php.net/downloads/php-sdk/deps/series/` may help.
+Make sure the version is matched with your extension. Unmatched dep version may cause strange problems like segfault, stuck, and corrupt behavior. Files in `https://downloads.php.net/~windows/php-sdk/deps/series/` may help.
 
 Extract to any path  (e.g. C:\deps)
 
