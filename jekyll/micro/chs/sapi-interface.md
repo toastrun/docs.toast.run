@@ -60,13 +60,13 @@ micro的SAPI名称应该是`"micro"`，这个名称可以通过PHP函数[php_sap
 
 返回自身的可执行文件（也就是exe/elf/mach-o）部分的大小。
 
-**返回值** 单位为字节（byte）
+**返回值** int 单位为字节（byte）
 
 {% include funcSign.html name='micro_get_sfxsize_limit' %}
 
 返回自身的payload部分的结尾位置，见micro_get_sfxsize
 
-**返回值** 单位为字节（byte）
+**返回值** int 单位为字节（byte）
 
 {% include funcSign.html name='micro_open_self' %}
 

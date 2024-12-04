@@ -21,8 +21,8 @@ Section模式支持配置limit，UPX压缩（ELF下需要修改二进制），�
 
 如果未设置以下的sfxsize section：
 
-- micro_get_sfxsize_limit返回0，所有`size`之后的数据均为payload
-- micro_get_sfxsize返回
+- `micro_get_sfxsize_limit`返回0，所有`size`之后的数据均为payload
+- `micro_get_sfxsize`返回
   - ELF为最后一个Section的结尾，如果没有Section表，返回最后一个`Program Header Segment`的结尾
   - Mach-O为`__LINKEDIT`的结尾
   - Windows下为最后一个Section的结尾
@@ -118,11 +118,7 @@ Windows下的数字签名是修改部分PE/COFF头内容（不改变大小），
 
 Mach-O签名是添加了一个segment/section，因此需要这么操作：
 
-1. Mach-O下将sfx和payload拼接
+1. 将sfx和payload拼接
 2. 补0对齐到4096
 3. 将__LINKEDIT的结尾设为文件结尾
 4. 进行签名
-
-
-
-

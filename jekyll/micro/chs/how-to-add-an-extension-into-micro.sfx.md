@@ -18,7 +18,7 @@ git clone --depth 1 --branch php-8.0.2 https://github.com/php/php-src php-src
 cd php-src
 # 准备micro
 git clone <micro的git url> sapi/micro
-# 打patch（参见readme.md，可选）
+# 打patch（参见patches/下的readme.md，可选）
 patch -p1 < sapi/micro/patches/disable_huge_page.patch
 ```
 
@@ -83,10 +83,11 @@ index 8193d9d69..1a9d1c846 100644
 
 对此可以考虑：
 
- - 手动patch相关检查（略麻烦）
- - 在构建sfx时在EXTRA_CFLAGS里加入`-DPHP_MICRO_FAKE_CLI`来让micro伪装成cli（不推荐，但省事）
+- 手动patch相关检查（略麻烦）
+- 在构建sfx时在EXTRA_CFLAGS里加入`-DPHP_MICRO_FAKE_CLI`来让micro伪装成cli（不推荐，但省事）
 
 patch的方法：以swoole v4.6.2 tag的代码为例
+
 ```patch
 diff --git a/ext-src/php_swoole.cc b/ext-src/php_swoole.cc
 index d98127733..89ab4380c 100644
@@ -106,14 +107,13 @@ index d98127733..89ab4380c 100644
 
 扩展可能
 
- - 将php_扩展名.h移出扩展根目录（例如swow或者swoole在提交[eba657b](https://github.com/swoole/swoole-src/commit/eba657b310fb7e714764e3b4d4e398138714180d)之后）导致不兼容php构建系统的静态in-tree构建
- - 将所有C/CPP源码移出扩展根目录（例如swow在提交[9218e9c](https://github.com/swow/swow/commit/9218e9c8ca785abb3292d3cb79ef5a41094e0f27)之前）导致不兼容
-Windows php构建系统的in-tree构建
+- 将php_扩展名.h移出扩展根目录（例如swow或者swoole在提交[eba657b](https://github.com/swoole/swoole-src/commit/eba657b310fb7e714764e3b4d4e398138714180d)之后）导致不兼容php构建系统的静态in-tree构建
+- 将所有C/CPP源码移出扩展根目录（例如swow在提交[9218e9c](https://github.com/swow/swow/commit/9218e9c8ca785abb3292d3cb79ef5a41094e0f27)之前）导致不兼容Windows php构建系统的in-tree构建
 
 对于这类问题可以采用一些缓解方法：
 
- - 移出任意c文件到扩展根目录，并修改config.m4
- - 在扩展根目录新建一个内容为下的任意名称的头文件
+- 移出任意c文件到扩展根目录，并修改config.m4
+- 在扩展根目录新建一个内容为下的任意名称的头文件
 ```c
 extern zend_module_entry <扩展名>_module_entry;
 #define phpext_<扩展名>_ptr &<扩展名>_module_entry
