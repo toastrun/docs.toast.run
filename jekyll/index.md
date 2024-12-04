@@ -14,6 +14,8 @@ nav_order: 1
 
 [Micro 中文 Wiki](/micro/chs)
 
+[Micro English Wiki](/micro/en)
+
 [Swow API Reference (automatic generated, ci branch)](/swow-api/ci.html)
 
 [Swow API Reference (automatic generated, develop branch)](/swow-api/develop.html)

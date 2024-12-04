@@ -32,7 +32,7 @@ ini文件头为
 struct MICRO_INI_HEADER{
     uint32_t magic; // "\xfd\xf6\x69\xe6"
     uint32_t size; // in big-endian
-}
+} __attribute__((packed));
 ```
 
 例如：使用以下php代码来生成ini头：
@@ -51,10 +51,12 @@ fclose($f);
 
 然后执行
 
-Windows:
+Windows (CMD):
 ```batch
 COPY /B micro.sfx + myiniheader.bin + myawesomeapp.phar myawesomeapp.exe
 ```
+
+Windows的Powershell里`COPY`命令不能这么用，由于存在比较麻烦的codepage问题，建议使用CMD或者PHP脚本来进行拼接。
 
 Unix:
 ```batch

@@ -2,7 +2,7 @@
 layout: page
 title: 如何在micro中加入一个PHP扩展
 parent: micro Wiki CHS
-nav_order: 50
+nav_order: 60
 ---
 
 像一般的in-tree扩展构建一样加入扩展即可，以下以[swoole](https://github.com/swoole/swoole-src)在linux的构建为例
