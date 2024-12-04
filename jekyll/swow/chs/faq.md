@@ -29,3 +29,23 @@ Error: Please re-run your program with "-e" option in path/to/vendor/swow/swow/l
 
 原因：开启`-e`参数后，PHP会在执行每个OPCode时尝试调用扩展注册的回调函数，因此平时开启`-e`选项会影响程序性能，我们需要在调试的时候手动开启该选项，否则单步调试跟踪和断点功能将无法使用。
 {: .hint }
+
+## 启用Swow后PHP提示PHP Warning: PHP Startup: Swow pdo_pgsql hook not enabled
+
+如果你的Swow编译时开启了pgsql支持，在启动时环境又没有pgsql：
+
+- 没有开启pdo扩展，提示: "pdo extension not enabled"
+- 没有找到支持的libpq依赖库，提示: "libpq.so/libpq.5.dylib/lipq.dll not found" "libpq is too old"
+
+那么启动时会提示这个，这时pdo_pgsql的hook不工作。
+
+如果你需要支持：
+
+- 开启PHP的[pdo扩展](https://www.php.net/manual/zh/pdo.setup.php)
+- [安装libpq](https://www.postgresql.org/download/)
+
+如果你不需要这个支持，可以配置ini：
+
+```plain
+swow.hook_pdo_pgsql = Off;
+```
