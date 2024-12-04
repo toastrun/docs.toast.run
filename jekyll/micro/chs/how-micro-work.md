@@ -17,7 +17,7 @@ micro是一个自执行文件，类似于7z或者WinRAR的自解压程序。
 
 大多数全局变量遵循cli的工作模式。较为特殊的有
 
- - PHP_BINARY： 如果不进行INI配置（见[INI配置](/micro/chs/ini-settings.html)），PHP_BINARY变量被设置为空字符串`""`；否则为INI配置的值
+- PHP_BINARY： 如果不进行INI配置（见[INI配置](/micro/chs/ini-settings.html)），PHP_BINARY变量被设置为空字符串`""`；否则为INI配置的值
 
 ## 文件流
 
@@ -28,8 +28,8 @@ micro是一个自执行文件，类似于7z或者WinRAR的自解压程序。
 
 对于micro中执行的php代码：
 
- - 对打开的自身文件流使用ftell和fseek时，减去了sfx大小
- - 对打开的自身文件流使用fstat时，其中的文件大小属性减去了sfx大小
+- 对打开的自身文件流使用ftell和fseek时，减去了sfx大小
+- 对打开的自身文件流使用fstat时，其中的文件大小属性减去了sfx大小
 
 也就是说，php代码中打开的自身文件，在php看来将会与被拼接的php代码一致，不会出现sfx的ELE/PE头或者INI设置。
 
