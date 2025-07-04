@@ -25,6 +25,7 @@ Section模式支持配置limit，UPX压缩（ELF下需要修改二进制），�
 - `micro_get_sfxsize`返回
   - ELF为最后一个Section的结尾，如果没有Section表，返回最后一个`Program Header Segment`的结尾
   - Mach-O为`__LINKEDIT`的结尾
+  - Fat Mach-O为最后一个`fat_arch`对应的macho的结尾(`offset + size`)
   - Windows下为最后一个Section的结尾
 
 #### sfxsize section
@@ -55,6 +56,19 @@ micro通过`.sh_name`为`.sfxsize`的Section获取上面的结构体
 对于macOS的Mach-O：
 
 micro通过`__DATA` Segment的`__micro_sfxsize` Section获取上面的结构体
+
+#### Fat (Universal) Mach-O
+
+在micro主版本号1之前，下面的行为可能发生变化。
+{: .hint}
+
+对于macOS的Fat Mach-O：
+
+micro在`cputype == CPU_TYPE_X86`的`fat_arch`的`offset + 0x1000`处获取上面的结构体
+
+目前，micro不支持x86(32-bit)（大约能构建，但没有任何保证）。macOS对x86的支持很早（Catalina）就抛弃了，而x86_64的支持则更早（Snow Leopard）就出现了，因此复用了`CPU_TYPE_X86`
+
+0x1000是最小的x86可执行程序的大小，可以放一个stub进去告知用户不支持x86架构
 
 #### PE
 

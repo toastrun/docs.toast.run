@@ -25,6 +25,7 @@ If the following sfxsize section is not set:
 - `micro_get_sfxsize` returns, when
   - ELF: The end of the last Section, if there is no Section table, return the end of the last `Program Header Segment`
   - Mach-O: The end of `__LINKEDIT`
+  - Fat Mach-O: End of the last `fat_arch` macho (`offset + size`)
   - Windows: The end of the last Section
 
 #### sfxsize section
@@ -55,6 +56,19 @@ micro obtains the above structure through the Section with `.sh_name` as `.sfxsi
 For macOS's Mach-O:
 
 micro obtains the above structure through the `__micro_sfxsize` Section of the `__DATA` Segment
+
+#### Fat (Universal) Mach-O
+
+The following behavior may change before micro's main version 1.
+{: .hint}
+
+For Fat Mach-O:
+
+micro will read the section at `fat_arch.offset + 0x1000` where `cputype == CPU_TYPE_X86`
+
+For now, micro do not support x86(32-bit) (maybe able to build, but without any official support). macOS support for x86 have been dropped long long ago (Catalina), and support of x86_64 appears earlier (Snow Leopard), so we reuse `CPU_TYPE_X86` type.
+
+0x1000 is size of a minimal x86 executable, this allows a stub for telling use the arch is unsupported.
 
 #### PE
 
