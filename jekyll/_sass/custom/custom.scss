@@ -54,3 +54,51 @@ h4,
 .switcher .current {
   opacity: .6;
 }
+
+// Version dropdown in the page header
+.switcher-menu {
+  position: relative;
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::after {
+      content: ' \25BE';
+    }
+  }
+
+  .switcher-menu-list {
+    position: absolute;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    min-width: 7rem;
+    padding: .3rem 0;
+    background-color: $body-background-color;
+    border: $border $border-color;
+    border-radius: $border-radius;
+  }
+
+  .switcher-menu-item {
+    padding: .2rem .6rem;
+    white-space: nowrap;
+  }
+}
+
+// Version column of a search result: the version of the page the result comes
+// from, empty for the hand-written pages
+.search-result-version {
+  margin-left: auto;
+  padding-left: .6rem;
+  font-family: monospace;
+  font-size: .65rem;
+  color: $search-result-preview-color;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

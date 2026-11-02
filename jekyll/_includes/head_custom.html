@@ -5,5 +5,9 @@
 {%- endcomment -%}
 {%- if lang_alt_html != "" %}{{ lang_alt_html }}<meta name="doc-lang" content="{{ current_lang }}">
 {%- endif -%}
-{%- if current_version %}<meta name="doc-version" content="{{ current_version }}">
+{%- if current_version %}
+<meta name="doc-version" content="{{ current_version }}">
+<meta name="doc-search-index" content="{{ current_version }}">
+{%- else %}
+<meta name="doc-search-index" content="main">
 {%- endif -%}

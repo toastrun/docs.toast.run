@@ -93,33 +93,24 @@ function disableHeadStyleSheets() {
 // Site search
 
 function initSearch() {
+  // Local copy of the theme script: every page loads the index of its own
+  // scope, see _plugins/search_data.rb and _includes/head_custom.html.
+  var indexMeta = document.querySelector('meta[name="doc-search-index"]');
+  var indexName = indexMeta ? indexMeta.content : 'main';
+  var langMeta = document.querySelector('meta[name="doc-lang"]');
+  var lang = langMeta ? langMeta.content : '';
   var request = new XMLHttpRequest();
-  request.open('GET', '{{ "assets/js/search-data.json" | relative_url }}', true);
+  request.open('GET', '{{ "assets/js/search-data-" | relative_url }}' + indexName + '.json', true);
 
   request.onload = function(){
     if (request.status >= 200 && request.status < 400) {
-      // Local copy of the theme script: keep only the search entries of the
-      // current language or version, filtered before the lunr index is built.
-      // The page context is provided by the metas in _includes/head_custom.html.
-      // search-data.json is an object keyed by index, so convert it to an array.
-      var parsed = JSON.parse(request.responseText);
-      var entries = Object.keys(parsed).map(function (key) { return parsed[key]; });
-      var langMeta = document.querySelector('meta[name="doc-lang"]');
-      var versionMeta = document.querySelector('meta[name="doc-version"]');
-      var lang = langMeta && langMeta.content;
-      var version = versionMeta && versionMeta.content;
-      entries = entries.filter(function (entry) {
-        if (version) {
-          return entry.version === version;
-        }
-        if (lang) {
-          // Without a version context, versioned entries are excluded instead
-          // of being treated as entries of the default ci version
-          return !entry.version && (!entry.lang || entry.lang === lang);
-        }
-        return true;
-      });
-      var docs = entries;
+      var docs = JSON.parse(request.responseText);
+      if (indexName === 'main') {
+        // The hand-written pages are filtered by language; the API entries stay
+        docs = docs.filter(function (entry) {
+          return !entry.lang || !lang || entry.lang === lang || entry.version;
+        });
+      }
 
       lunr.tokenizer.separator = {{ site.search.tokenizer_separator | default: site.search_tokenizer_separator | default: "/[\s\-/]+/" }}
 
@@ -296,6 +287,15 @@ function searchLoaded(index, docs) {
         resultTitle.appendChild(resultSection);
         resultDocOrSection = resultSection;
       }
+
+      // Local addition: a column that shows the version of the resulting page.
+      // The title area is rewritten when the query matches the title, so the
+      // column lives next to it, not inside it. Pages without a version leave
+      // the column empty and keep the alignment.
+      var resultVersion = document.createElement('span');
+      resultVersion.classList.add('search-result-version');
+      resultVersion.textContent = doc.version || '';
+      resultDoc.appendChild(resultVersion);
 
       var metadata = result.matchData.metadata;
       var titlePositions = [];
