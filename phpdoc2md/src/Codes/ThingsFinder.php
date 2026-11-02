@@ -45,14 +45,30 @@ class ThingsFinder extends NodeVisitorAbstract
     public function __construct(
         public bool $skipPrivate,
         public string $parentPage,
+        public ?string $grandParentPage = null,
         public ?string $version = null,
+        public ?string $versionLabel = null,
+        public ?int $navOrder = null,
     ) {
         $this->namespacePage = new NamespacePage(
             name: '\\',
-            parentPage: $parentPage,
+            // the root page doubles as the landing page of the version
+            parentPage: $grandParentPage ?? $parentPage,
+            grandParentPage: null,
             version: $this->version,
+            titleOverride: $this->versionPageTitle(),
+            navOrder: $this->navOrder,
         );
         $this->namespacePages[''] = $this->namespacePage;
+    }
+
+    private function versionPageTitle(): string
+    {
+        if ($this->version === null) {
+            return $this->parentPage;
+        }
+
+        return $this->versionLabel ?? $this->version;
     }
 
     public function enterNode(Node $node)
@@ -86,9 +102,10 @@ class ThingsFinder extends NodeVisitorAbstract
             } else {
                 $this->namespacePage = new NamespacePage(
                     name: $this->getNamespaceString(),
-                    parentPage: $this->parentPage,
+                    parentPage: $this->versionPageTitle(),
+                    grandParentPage: $this->version === null ? null : $this->parentPage,
                     version: $this->version,
-                );
+                        );
                 $this->namespacePages[$this->getNamespaceString()] = $this->namespacePage;
             }
         }
@@ -112,7 +129,7 @@ class ThingsFinder extends NodeVisitorAbstract
                         parent: $this->namespacePage,
                         kind: $kind,
                         version: $this->version,
-                    );
+                                );
                     $this->classSegments[$name] = ClassLikeSegment::fromPhpNode($node);
                     $this->classPages[$name]->addSegment($this->classSegments[$name]);
                 }

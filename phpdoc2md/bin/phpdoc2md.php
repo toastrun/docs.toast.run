@@ -4,19 +4,54 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Phpdoc2md\Codes\ThingsFinder;
 
-$ver = $argv[3] ?? null;
-$parentPage = "Swow API Reference";
-if ($ver) {
-    $parentPage = "Swow API Reference ($ver)";
+/*
+ * Generate the API reference pages of one version.
+ *
+ *   phpdoc2md.php <source-dir> <dest-dir> --version=<ref> [options]
+ *
+ * Options:
+ *   --version=<ref>   version label, written to the front matter and used in the
+ *                     page titles
+ *   --label=<text>    title of the version landing page, defaults to the version
+ *   --group=<title>   navigation entry above every version
+ *   --order=<n>       sidebar position of the version landing page
+ */
+
+$positional = [];
+$options = [];
+foreach (array_slice($argv, 1) as $arg) {
+    if (str_starts_with($arg, '--')) {
+        [$key, $value] = array_pad(explode('=', substr($arg, 2), 2), 2, true);
+        $options[$key] = $value;
+    } else {
+        $positional[] = $arg;
+    }
 }
 
-$finder = new ThingsFinder(false, $parentPage, $ver);
+if (count($positional) < 2) {
+    fwrite(STDERR, "usage: phpdoc2md.php <source-dir> <dest-dir> --version=<ref> [--label=<text>] [--group=<title>]\n");
+    exit(1);
+}
 
-$swowDir = realpath($argv[1]);
+[$swowDir, $destDir] = $positional;
+$version = $options['version'] ?? null;
+$group = $options['group'] ?? 'Swow API Reference';
+$label = $options['label'] ?? $version;
+
+$finder = new ThingsFinder(
+    skipPrivate: false,
+    parentPage: $group,
+    grandParentPage: null,
+    version: $version,
+    versionLabel: $label,
+    navOrder: isset($options['order']) ? (int) $options['order'] : null,
+);
+
+$swowDir = realpath($swowDir);
 if (!is_dir($swowDir)) {
     throw new Exception('not a dir');
 }
-$destDir = rtrim($argv[2], '/');
+$destDir = rtrim($destDir, '/');
 
 // main stub
 $stubPath = "$swowDir/lib/swow-stub/src/Swow.php";
@@ -38,10 +73,6 @@ foreach ($iter as $fileInfo) {
 }
 
 foreach ($finder->dumpAll() as $name => $content) {
-    //var_dump($name, $page);
-    // if ($name === '') {
-    //     $name = 'index';
-    // }
     $path = $destDir . DIRECTORY_SEPARATOR . $name;
     @mkdir(dirname($path), recursive: true);
     print("generate $path\n");

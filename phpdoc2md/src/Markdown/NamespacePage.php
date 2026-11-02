@@ -8,13 +8,16 @@ class NamespacePage extends Page
     public function __construct(
         private string $name,
         public string $parentPage,
+        private ?string $grandParentPage = null,
         private ?string $version = null,
+        private ?string $titleOverride = null,
+        private ?int $navOrder = null,
     ) {
     }
 
     public function getPageTitle(): string
     {
-        return "Namespace {$this->name}";
+        return $this->titleOverride ?? "Namespace {$this->name}";
     }
 
     public function str(): string
@@ -30,6 +33,12 @@ class NamespacePage extends Page
             "name: '{$this->name}'",
         ];
 
+        if ($this->grandParentPage !== null) {
+            $metaVars[] = "grand_parent: '{$this->grandParentPage}'";
+        }
+        if ($this->navOrder !== null) {
+            $metaVars[] = "nav_order: {$this->navOrder}";
+        }
         if ($this->version !== null) {
             $metaVars[] = "version: '{$this->version}'";
         }
