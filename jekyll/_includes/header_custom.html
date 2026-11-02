@@ -1,1 +1,6 @@
-{% include switcher.html %}
+{%- if lang_row_html != "" %}
+<nav class="switcher" aria-label="Language">{{ lang_row_html }}</nav>
+{%- endif -%}
+{%- if version_row_html != "" %}
+<nav class="switcher" aria-label="Version">{{ version_row_html }}</nav>
+{%- endif -%}

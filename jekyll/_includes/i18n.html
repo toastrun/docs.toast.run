@@ -1,0 +1,94 @@
+{%- comment -%}
+  Context and alternatives of the current page, assigned once by the default
+  layout and read by header_custom.html and head_custom.html.
+
+  Assigns:
+  - current_lang, current_version: the dimensions that apply to this page
+  - lang_row_html, version_row_html: the switcher rows, empty when the row would
+    hold no link
+  - lang_alt_html: the hreflang links of the language tree
+
+  A target that does not exist falls back to the front page of the target tree.
+{%- endcomment -%}
+{%- assign languages = site.data.languages -%}
+{%- assign versions = site.data.versions -%}
+{%- assign all_urls = site.pages | map: "url" -%}
+{%- assign segments = page.url | split: "/" -%}
+{%- assign project = segments[1] -%}
+{%- assign current_lang = page.lang -%}
+{%- assign current_version = page.version -%}
+{%- if current_version == nil and project == "swow-api" -%}
+  {%- assign current_version = segments[2] | remove: ".html" -%}
+{%- endif -%}
+
+{%- assign lang_row_html = "" -%}
+{%- assign lang_alt_html = "" -%}
+{%- if current_lang -%}
+  {%- assign lang_self_prefix = "/" | append: project | append: "/" | append: current_lang | append: "/" -%}
+  {%- capture lang_row_html -%}
+    {%- for language in languages -%}
+      {%- assign lang = language[1] -%}
+      {%- assign target = nil -%}
+      {%- if language[0] == current_lang -%}
+        {%- assign target = page.url -%}
+        <span class="switcher-item current" aria-current="true">{{ lang.label }}</span>
+      {%- else -%}
+        {%- assign home = "/" | append: project | append: "/" | append: language[0] | append: "/" -%}
+        {%- if segments[2] == current_lang -%}
+          {%- assign other_prefix = "/" | append: project | append: "/" | append: language[0] | append: "/" -%}
+          {%- assign exact = page.url | replace_first: lang_self_prefix, other_prefix -%}
+        {%- endif -%}
+        {%- if exact and all_urls contains exact -%}
+          {%- assign target = exact -%}
+        {%- elsif all_urls contains home -%}
+          {%- assign target = home -%}
+        {%- endif -%}
+        {%- if target -%}
+          {%- assign has_lang_link = true -%}
+          <a class="switcher-item" href="{{ target | relative_url }}" hreflang="{{ lang.code }}">{{ lang.label }}</a>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if target -%}
+        {%- capture alt -%}<link rel="alternate" hreflang="{{ lang.code }}" href="{{ site.url }}{{ target | relative_url }}">
+{% endcapture -%}
+        {%- assign lang_alt_html = lang_alt_html | append: alt -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- unless has_lang_link -%}
+    {%- assign lang_row_html = "" -%}
+  {%- endunless -%}
+{%- endif -%}
+
+{%- assign version_row_html = "" -%}
+{%- if current_version -%}
+  {%- assign version_self_prefix = "/swow-api/" | append: current_version | append: "/" -%}
+  {%- capture version_row_html -%}
+    {%- for version in versions -%}
+      {%- assign landing = "/swow-api/" | append: version.ref | append: ".html" -%}
+      {%- assign target = nil -%}
+      {%- if version.ref == current_version -%}
+        <span class="switcher-item current" aria-current="true">{{ version.label }}</span>
+      {%- else -%}
+        {%- if segments[2] contains ".html" -%}
+          {%- assign exact = landing -%}
+        {%- else -%}
+          {%- assign other_prefix = "/swow-api/" | append: version.ref | append: "/" -%}
+          {%- assign exact = page.url | replace_first: version_self_prefix, other_prefix -%}
+        {%- endif -%}
+        {%- if all_urls contains exact -%}
+          {%- assign target = exact -%}
+        {%- elsif all_urls contains landing -%}
+          {%- assign target = landing -%}
+        {%- endif -%}
+        {%- if target -%}
+          {%- assign has_version_link = true -%}
+          <a class="switcher-item" href="{{ target | relative_url }}">{{ version.label }}</a>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- unless has_version_link -%}
+    {%- assign version_row_html = "" -%}
+  {%- endunless -%}
+{%- endif -%}

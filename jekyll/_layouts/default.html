@@ -5,10 +5,13 @@ layout: table_wrappers
 <!DOCTYPE html>
 
 {%- comment -%}
-  Local copy of the theme layout: html lang is mapped from the page language,
-  because pages under swow/chs, swow-blog, ... are not in the site default language
+  Local copy of the theme layout, for two things:
+  - html lang is mapped from the page language, because pages under swow/chs,
+    swow-blog, ... are not in the site default language
+  - the switcher and head includes read the variables that i18n.html assigns
 {%- endcomment -%}
 {%- assign page_language = site.data.languages[page.lang] -%}
+{%- include i18n.html -%}
 <html lang="{{ page_language.code | default: site.lang | default: 'en-US' }}">
 {% include head.html %}
 <body>
