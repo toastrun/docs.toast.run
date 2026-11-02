@@ -8,6 +8,7 @@ class ClassPage extends Page
         private string $name,
         private string $kind,
         private NamespacePage $parent,
+        private ?string $version = null,
     ) {
     }
 
@@ -25,6 +26,10 @@ class ClassPage extends Page
             'has_toc: true',
             "name: '{$this->name}'",
         ];
+
+        if ($this->version !== null) {
+            $metaVars[] = "version: '{$this->version}'";
+        }
 
         foreach ($this->meta as $key => $value) {
             if (!$value) {

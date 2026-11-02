@@ -10,7 +10,7 @@ if ($ver) {
     $parentPage = "Swow API Reference ($ver)";
 }
 
-$finder = new ThingsFinder(false, $parentPage);
+$finder = new ThingsFinder(false, $parentPage, $ver);
 
 $swowDir = realpath($argv[1]);
 if (!is_dir($swowDir)) {

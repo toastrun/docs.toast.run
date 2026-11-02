@@ -45,10 +45,12 @@ class ThingsFinder extends NodeVisitorAbstract
     public function __construct(
         public bool $skipPrivate,
         public string $parentPage,
+        public ?string $version = null,
     ) {
         $this->namespacePage = new NamespacePage(
             name: '\\',
             parentPage: $parentPage,
+            version: $this->version,
         );
         $this->namespacePages[''] = $this->namespacePage;
     }
@@ -85,6 +87,7 @@ class ThingsFinder extends NodeVisitorAbstract
                 $this->namespacePage = new NamespacePage(
                     name: $this->getNamespaceString(),
                     parentPage: $this->parentPage,
+                    version: $this->version,
                 );
                 $this->namespacePages[$this->getNamespaceString()] = $this->namespacePage;
             }
@@ -108,6 +111,7 @@ class ThingsFinder extends NodeVisitorAbstract
                         name: $name,
                         parent: $this->namespacePage,
                         kind: $kind,
+                        version: $this->version,
                     );
                     $this->classSegments[$name] = ClassLikeSegment::fromPhpNode($node);
                     $this->classPages[$name]->addSegment($this->classSegments[$name]);

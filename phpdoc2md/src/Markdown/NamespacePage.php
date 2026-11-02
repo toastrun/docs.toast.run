@@ -8,6 +8,7 @@ class NamespacePage extends Page
     public function __construct(
         private string $name,
         public string $parentPage,
+        private ?string $version = null,
     ) {
     }
 
@@ -28,6 +29,10 @@ class NamespacePage extends Page
             'has_toc: true',
             "name: '{$this->name}'",
         ];
+
+        if ($this->version !== null) {
+            $metaVars[] = "version: '{$this->version}'";
+        }
 
         foreach ($this->meta as $key => $value) {
             if (!$value) {
