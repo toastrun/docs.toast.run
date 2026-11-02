@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
     inputs:
       swow_ref:
-        description: 'Using Swow commit'
-        default: 'ci'
+        description: 'Extra Swow ref to publish, e.g. a branch or a tag'
+        default: ''
         required: false
   repository_dispatch:
     types: [ update ]
@@ -15,17 +15,11 @@ jobs:
   sync:
     name: Sync to site
     runs-on: "ubuntu-latest"
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
-
-      # yet only this, because multi version is not implemented
-      - name: Checkout Swow Source
-        uses: actions/checkout@v3
-        with:
-          repository: swow/swow
-          ref: ${{ (github.event.inputs && github.event.inputs.swow_ref) || (github.event.client_payload && github.event.client_payload.swow_ref) || 'ci' }}
-          path: swow-ci
 
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
@@ -58,10 +52,64 @@ jobs:
         run: |
           composer update -o
 
-      - name: Build pages
+      # ci and develop, the latest release, and the two newest stable releases
+      - name: Resolve versions
         shell: bash
         run: |
-          php phpdoc2md/bin/phpdoc2md.php swow-ci jekyll/swow-api/ci 'ci'
+          gh api "repos/swow/swow/releases?per_page=30" --jq '
+            [.[]|select(.draft==false)] as $all
+            | [.[]|select(.prerelease==false)|.tag_name] as $stable
+            | (["ci","develop"] + [$all[0].tag_name] + $stable[0:2])
+            | reduce .[] as $ref ([]; if index($ref) then . else . + [$ref] end)
+          ' > versions.json
+          if [ -n "${{ github.event.inputs.swow_ref }}" ]; then
+            jq --arg ref "${{ github.event.inputs.swow_ref }}" '. + [$ref] | unique' versions.json > versions.tmp
+            mv versions.tmp versions.json
+          fi
+          cat versions.json
+
+      # One shallow fetch per ref. The blob filter keeps the history of the
+      # older refs almost free; git archive pulls the two directories later.
+      - name: Fetch Swow sources
+        shell: bash
+        run: |
+          git init -q swow-src
+          cd swow-src
+          git remote add origin https://github.com/swow/swow.git
+          jq -r '.[]' ../versions.json | while read -r ref; do
+            git fetch -q --depth 1 --filter=blob:none origin "$ref"
+            mkdir -p "../src/$ref"
+            git archive "$(git rev-parse FETCH_HEAD)" lib/swow-stub lib/swow-library \
+              | tar -x -C "../src/$ref"
+          done
+
+      # The list is newest first: the two branches, the latest release, then the
+      # two newest stable releases. The first three also go into the merged index.
+      - name: Write versions data
+        shell: bash
+        run: |
+          jq 'to_entries | map({
+                ref: .value,
+                label: (.value | sub("^v"; "")),
+                search: (.key < 3)
+              })' versions.json > jekyll/_data/versions.json
+          cat jekyll/_data/versions.json
+
+      # The versions are newest first, and the sidebar keeps that order
+      - name: Build API pages
+        shell: bash
+        run: |
+          order=1
+          jq -r '.[] | "\(.ref) \(.label)"' jekyll/_data/versions.json \
+          | while read -r ref label; do
+              php phpdoc2md/bin/phpdoc2md.php "src/$ref" "jekyll/swow-api/$ref" \
+                --version="$ref" --label="$label" --order="$order"
+              order=$((order + 1))
+            done
+
+      - name: Build site
+        shell: bash
+        run: |
           cd jekyll
           bundle exec jekyll build
 
