@@ -1,0 +1,101 @@
+{%- comment -%}
+  Head additions of the site:
+  - hreflang alternates for pages in a language tree, including the current one
+  - canonical link for API pages, pointing at the default version
+  - doc-lang and doc-version metas consumed by the search filter
+{%- endcomment -%}
+{%- assign languages = site.data.languages -%}
+{%- assign versions = site.data.versions -%}
+{%- assign all_urls = site.pages | map: "url" -%}
+{%- assign url_parts = page.url | split: "/" -%}
+{%- assign project = url_parts[1] -%}
+
+{%- assign current_lang = page.lang -%}
+{%- if current_lang == nil -%}
+  {%- assign url_lang_entry = languages[url_parts[1]] -%}
+  {%- if url_lang_entry -%}
+    {%- assign current_lang = url_parts[1] -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if current_lang -%}
+  {%- for lang_entry in languages -%}
+    {%- assign lang_key = lang_entry[0] -%}
+    {%- assign lang = lang_entry[1] -%}
+    {%- if lang_key == current_lang -%}
+      {%- assign lang_target = page.url -%}
+    {%- else -%}
+      {%- assign lang_target = nil -%}
+      {%- assign lang_fallback = "/" | append: project | append: "/" | append: lang_key | append: "/" -%}
+      {%- if url_parts[2] == current_lang -%}
+        {%- assign lang_prefix = "/" | append: project | append: "/" | append: current_lang | append: "/" -%}
+        {%- assign lang_target_prefix = "/" | append: project | append: "/" | append: lang_key | append: "/" -%}
+        {%- assign lang_exact = page.url | replace_first: lang_prefix, lang_target_prefix -%}
+        {%- if all_urls contains lang_exact -%}
+          {%- assign lang_target = lang_exact -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- unless lang_target -%}
+        {%- if all_urls contains lang_fallback -%}
+          {%- assign lang_target = lang_fallback -%}
+        {%- endif -%}
+      {%- endunless -%}
+    {%- endif -%}
+    {%- if lang_target -%}
+<link rel="alternate" hreflang="{{ lang.code }}" href="{{ site.url }}{{ lang_target | relative_url }}">
+    {%- endif -%}
+  {%- endfor -%}
+<meta name="doc-lang" content="{{ current_lang }}">
+{%- endif -%}
+
+{%- assign current_version = page.version -%}
+{%- assign is_api_page = false -%}
+{%- if page.version -%}
+  {%- assign is_api_page = true -%}
+{%- endif -%}
+{%- if page.url contains "/swow-api/" -%}
+  {%- assign is_api_page = true -%}
+{%- endif -%}
+
+{%- if is_api_page -%}
+  {%- assign url_version_landing = false -%}
+  {%- if url_parts[1] == "swow-api" -%}
+    {%- if url_parts[2] contains ".html" -%}
+      {%- assign url_version_landing = true -%}
+      {%- assign url_version = url_parts[2] | replace_first: ".html", "" -%}
+    {%- else -%}
+      {%- assign url_version = url_parts[2] -%}
+    {%- endif -%}
+    {%- if current_version == nil -%}
+      {%- assign current_version = url_version -%}
+    {%- endif -%}
+  {%- endif -%}
+  {%- assign default_version = versions | where: "default", true | first -%}
+  {%- if current_version and default_version -%}
+    {%- assign version_ref = default_version.ref -%}
+    {%- assign version_fallback = "/swow-api/" | append: version_ref | append: ".html" -%}
+    {%- assign canonical_target = nil -%}
+    {%- if url_parts[1] == "swow-api" -%}
+      {%- if url_version_landing -%}
+        {%- assign canonical_exact = version_fallback -%}
+      {%- else -%}
+        {%- assign version_cur_prefix = "/swow-api/" | append: current_version | append: "/" -%}
+        {%- assign version_rest = page.url | remove_first: version_cur_prefix -%}
+        {%- assign version_target_prefix = "/swow-api/" | append: version_ref | append: "/" -%}
+        {%- assign canonical_exact = version_target_prefix | append: version_rest -%}
+      {%- endif -%}
+      {%- if all_urls contains canonical_exact -%}
+        {%- assign canonical_target = canonical_exact -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- unless canonical_target -%}
+      {%- if all_urls contains version_fallback -%}
+        {%- assign canonical_target = version_fallback -%}
+      {%- endif -%}
+    {%- endunless -%}
+    {%- if canonical_target -%}
+<link rel="canonical" href="{{ site.url }}{{ canonical_target | relative_url }}">
+    {%- endif -%}
+<meta name="doc-version" content="{{ current_version }}">
+  {%- endif -%}
+{%- endif -%}

@@ -23,7 +23,7 @@ email: dixyes@gmail.com
 description: >-
   a doc site for swow and libcat and other things
 baseurl: ""
-url: "//docs.toast.run"
+url: "https://docs.toast.run"
 #twitter_username: jekyllrb
 github_username:  swow
 
@@ -66,6 +66,30 @@ footers:
   '/micro':
     - '<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.'
     - 'Copyright 2022 the micro SAPI for PHP contributors'
+
+# Language of each document tree, used by the language switcher and by the
+# search index
+defaults:
+  - scope:
+      path: "swow/chs"
+    values:
+      lang: chs
+  - scope:
+      path: "swow/en"
+    values:
+      lang: en
+  - scope:
+      path: "micro/chs"
+    values:
+      lang: chs
+  - scope:
+      path: "micro/en"
+    values:
+      lang: en
+  - scope:
+      path: "swow-blog"
+    values:
+      lang: chs
 
 
 # Exclude from processing.
