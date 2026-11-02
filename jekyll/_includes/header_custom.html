@@ -1,6 +1,11 @@
 {%- if lang_row_html != "" %}
 <nav class="switcher" aria-label="Language">{{ lang_row_html }}</nav>
 {%- endif -%}
-{%- if version_row_html != "" %}
-<nav class="switcher" aria-label="Version">{{ version_row_html }}</nav>
+{%- if version_menu_html != "" %}
+<nav class="switcher" aria-label="Version">
+  <details class="switcher-menu">
+    <summary class="switcher-item current">{{ version_current_label }}</summary>
+    <div class="switcher-menu-list">{{ version_menu_html }}</div>
+  </details>
+</nav>
 {%- endif -%}

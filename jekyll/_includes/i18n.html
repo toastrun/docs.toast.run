@@ -18,7 +18,7 @@
 {%- assign current_lang = page.lang -%}
 {%- assign current_version = page.version -%}
 {%- if current_version == nil and project == "swow-api" -%}
-  {%- assign current_version = segments[2] | remove: ".html" -%}
+  {%- assign current_version = segments[2] -%}
 {%- endif -%}
 
 {%- assign lang_row_html = "" -%}
@@ -60,22 +60,20 @@
   {%- endunless -%}
 {%- endif -%}
 
-{%- assign version_row_html = "" -%}
+{%- assign version_menu_html = "" -%}
+{%- assign version_current_label = "" -%}
+{%- assign version_prefix = "/swow-api/" -%}
 {%- if current_version -%}
-  {%- assign version_self_prefix = "/swow-api/" | append: current_version | append: "/" -%}
-  {%- capture version_row_html -%}
+  {%- assign version_self_prefix = version_prefix | append: current_version | append: "/" -%}
+  {%- capture version_menu_html -%}
     {%- for version in versions -%}
-      {%- assign landing = "/swow-api/" | append: version.ref | append: ".html" -%}
-      {%- assign target = nil -%}
+      {%- assign landing = version_prefix | append: version.ref | append: "/" -%}
       {%- if version.ref == current_version -%}
-        <span class="switcher-item current" aria-current="true">{{ version.label }}</span>
+        {%- assign version_current_label = version.label -%}
       {%- else -%}
-        {%- if segments[2] contains ".html" -%}
-          {%- assign exact = landing -%}
-        {%- else -%}
-          {%- assign other_prefix = "/swow-api/" | append: version.ref | append: "/" -%}
-          {%- assign exact = page.url | replace_first: version_self_prefix, other_prefix -%}
-        {%- endif -%}
+        {%- assign other_prefix = version_prefix | append: version.ref | append: "/" -%}
+        {%- assign exact = page.url | replace_first: version_self_prefix, other_prefix -%}
+        {%- assign target = nil -%}
         {%- if all_urls contains exact -%}
           {%- assign target = exact -%}
         {%- elsif all_urls contains landing -%}
@@ -83,12 +81,12 @@
         {%- endif -%}
         {%- if target -%}
           {%- assign has_version_link = true -%}
-          <a class="switcher-item" href="{{ target | relative_url }}">{{ version.label }}</a>
+          <a class="switcher-menu-item" href="{{ target | relative_url }}">{{ version.label }}</a>
         {%- endif -%}
       {%- endif -%}
     {%- endfor -%}
   {%- endcapture -%}
   {%- unless has_version_link -%}
-    {%- assign version_row_html = "" -%}
+    {%- assign version_menu_html = "" -%}
   {%- endunless -%}
 {%- endif -%}
